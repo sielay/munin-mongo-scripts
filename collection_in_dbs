@@ -3,7 +3,7 @@ COLLECTION="users"
 case $1 in
         config)
                 cat <<'EOM'
-graph_title Collection across databases
+graph_title Collection $COLLECTION across databases
 graph_vlabel count
 EOM
 
@@ -36,7 +36,7 @@ for I in $DBS; do
 db.$COLLECTION.count();
 EOF
 )
-                echo $I $C
+                echo $I.value $C
                 SKIP="0"
         else
                 SKIP="1"
