@@ -2,10 +2,8 @@
 COLLECTION="users"
 case $1 in
         config)
-                cat <<'EOM'
-graph_title Collection $COLLECTION across databases
-graph_vlabel count
-EOM
+                echo graph_title Collection $COLLECTION across databases
+                echo graph_vlabel count
 
                 export DBS=$(mongo --quiet <<EOF
 show dbs
