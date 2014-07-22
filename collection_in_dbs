@@ -1,0 +1,44 @@
+#!/bin/bash
+COLLECTION="users"
+case $1 in
+        config)
+                cat <<'EOM'
+graph_title Collection across databases
+graph_vlabel count
+EOM
+
+                export DBS=$(mongo --quiet <<EOF
+show dbs
+EOF
+)
+                export SKIP="1"
+                for I in $DBS; do
+                        if [ $SKIP -eq '1' ]; then
+                                SKIP="0"
+                                echo "$I.label $I"
+                                SKIP="0"
+                        else
+                                SKIP="1"
+                        fi
+                done
+                exit 0;;
+esac
+
+export DBS=$(mongo --quiet <<EOF
+show dbs
+EOF
+)
+SKIP="1"
+for I in $DBS; do
+        if [ $SKIP -eq '1' ]; then
+                SKIP="0"
+                export C=$(mongo --quiet localhost/$I <<EOF
+db.$COLLECTION.count();
+EOF
+)
+                echo $I $C
+                SKIP="0"
+        else
+                SKIP="1"
+        fi
+done
